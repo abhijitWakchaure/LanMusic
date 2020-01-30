@@ -15,7 +15,7 @@ import (
 
 // const for default config
 const (
-	MUSICROOT = "/home/abhijit/Music"
+	MUSICROOT = "/Music"
 )
 
 // MusicList ...
