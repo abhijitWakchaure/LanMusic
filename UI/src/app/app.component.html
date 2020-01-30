@@ -6,6 +6,26 @@
 </div>
 
 <div class="container">
+  <div *ngIf="isDataLoaded">
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>Sr. No.</th>
+          <th>Title</th>
+          <th>Size</th>
+          <th>IsDir</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let md of musicData; let i=index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ md.name }}</td>
+          <td>{{ md.size }}</td>
+          <td>{{ md.isDir }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
   <div class="text-center" *ngIf="!isDataLoaded">
     Loading your favorite music...<br />
     <div class="loader"></div>
