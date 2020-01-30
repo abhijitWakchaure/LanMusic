@@ -1,4 +1,4 @@
-FROM abhijitwakchaure/drl-go-base as preserver
+FROM abhijitwakchaure/lanmusic-go-base as preserver
 WORKDIR /go/src/lanmusic/
 COPY gosrc/ .
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app . \
@@ -12,4 +12,4 @@ COPY --from=preserver /go/src/lanmusic/app /usr/local/bin/lanmusic
 ADD ./UI/dist/lanMusic/ .
 ADD ./docker-entrypoint.sh /usr/local/bin/
 ENTRYPOINT [ "/usr/local/bin/docker-entrypoint.sh"]
-EXPOSE 80 8080 9000
+EXPOSE 80 9000
