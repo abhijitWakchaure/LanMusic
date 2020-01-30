@@ -1,12 +1,14 @@
-package main
+package music
 
 import (
+	"encoding/json"
 	"errors"
-	"fmt"
 	"io/ioutil"
-	"lanmusic/logger"
 	"log"
+	"net/http"
 	"os"
+
+	"github.com/abhijitWakchaure/lanmusic/gosrc/logger"
 )
 
 // const for default config
@@ -46,10 +48,28 @@ func exists(path string) (bool, error) {
 	return true, nil
 }
 
-func main() {
-	fmt.Println("### LanMusic ###")
+func ListMusic(w http.ResponseWriter, r *http.Request) {
 	mlist := listDir()
-	for i, ml := range mlist.Filenames {
-		fmt.Println(i+1, ml)
+	w.WriteHeader(http.StatusOK)
+	response := struct {
+		status  string
+		message string
+		data    []string
+	}{
+		status:  "success",
+		message: "Here is your music",
+		data:    mlist.Filenames,
 	}
+	res, err := json.Marshal(response)
+	if err != nil {
+		res, _ = json.Marshal(struct {
+			status  string
+			message string
+		}{
+			status:  "error",
+			message: "Unable to list your music",
+		})
+	}
+	w.Write(res)
+	return
 }

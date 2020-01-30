@@ -12,7 +12,7 @@ print_help_string() {
   echo -e '\t\t\t'$2
 }
 launch_app() {
-  docker run -it -v $1:/Music lanmusic
+  docker run -it -v $1:/Music -p 80:80 -p 8080:8080 -p 9000:9000 lanmusic
 }
 if [[ $# -gt 0 ]]; then
   key="$1"

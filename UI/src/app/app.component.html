@@ -1,0 +1,18 @@
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1>LanMusic</h1>
+    <p>Listen to your favorite songs from your friends over the LAN</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="text-center" *ngIf="!isDataLoaded">
+    Loading your favorite music...<br />
+    <div class="loader"></div>
+  </div>
+  <div class="text-center" *ngIf="isError">
+    <div class="card bg-danger text-white">
+      <div class="card-body">{{ ErrorMsg }}</div>
+    </div>
+  </div>
+</div>
