@@ -24,6 +24,8 @@ func main() {
 		log.Fatal(http.ListenAndServe(":9000", handlers.CORS(allowedOrigins, allowedMethods, allowedHeaders)(musicRouter)))
 		shutdown <- true
 	}()
-	fmt.Println("LanMusic api server started...!")
+	fmt.Printf("LanMusic api server started on port 9000\n")
+	fmt.Println("You can visit the web interface at:  http://localhost")
+
 	<-shutdown
 }
