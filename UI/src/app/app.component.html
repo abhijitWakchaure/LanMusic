@@ -20,14 +20,19 @@
             {{ md.name }}
             <p class="text-muted">{{ md.path || "path/to/music" }}</p>
           </div>
-          <div class="col-sm-1 text-center mx-auto my-auto" style="font-size: 1.5em;"><i class="fa fa-play"></i></div>
+          <div
+            class="col-sm-1 text-center mx-auto my-auto"
+            style="font-size: 1.5em;"
+          >
+            <i class="fa fa-play"></i>
+          </div>
         </div>
       </div>
     </div>
   </div>
   <div class="text-center" *ngIf="!isDataLoaded">
-    Loading your favorite music...<br />
-    <div class="loader"></div>
+    Loading your favorite music...
+    <div class="loader">&nbsp;</div>
   </div>
   <div class="text-center" *ngIf="isError">
     <div class="card bg-danger text-white">
