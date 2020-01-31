@@ -2,7 +2,6 @@ package music
 
 import (
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -13,7 +12,7 @@ import (
 
 // const for default config
 const (
-	MUSICROOT = "/home/abhijit/Music"
+	MUSICROOT = "/Music"
 )
 
 // MList ...
@@ -31,8 +30,7 @@ type MObject struct {
 func listDir() MList {
 	var mlist MList
 	if ok, err := exists(MUSICROOT); !ok {
-		logger.Log(logger.CRITICAL, "Make sure your mount target is /Music")
-		fmt.Println(err)
+		logger.Log(logger.CRITICAL, "Make sure your mount target is "+MUSICROOT+" Err:"+err.Error())
 	}
 	files, err := ioutil.ReadDir(MUSICROOT)
 	if err != nil {
