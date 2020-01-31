@@ -1,6 +1,7 @@
 package logger
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -11,27 +12,33 @@ type LogLevel string
 
 // const for different log levels
 const (
-	INFO     LogLevel = "[INFO]"
 	DEBUG    LogLevel = "[DEBUG]"
+	INFO     LogLevel = "[INFO]"
+	ERROR    LogLevel = "[ERROR]"
 	FATAL    LogLevel = "[FATAL]"
 	CRITICAL LogLevel = "[CRITICAL]"
 	DEFAULT  LogLevel = ""
 )
 
-// Log will do the actual logging
-func Log(logLevel LogLevel, msg interface{}) {
+func init() {
 	log.SetPrefix("# ")
+}
+
+// Log will do the actual logging
+func Log(logLevel LogLevel, msg ...interface{}) {
 	switch logLevel {
-	case INFO:
-		log.Println(INFO, msg)
 	case DEBUG:
-		log.Println(DEBUG, msg)
+		log.Println(DEBUG, fmt.Sprintln(msg...))
+	case INFO:
+		log.Println(INFO, fmt.Sprintln(msg...))
+	case ERROR:
+		log.Println(ERROR, fmt.Sprintln(msg...))
 	case FATAL:
-		log.Fatalln(FATAL, msg)
+		log.Fatalln(FATAL, fmt.Sprintln(msg...))
 	case CRITICAL:
-		log.Fatalln(CRITICAL, msg)
+		log.Fatalln(CRITICAL, fmt.Sprintln(msg...))
 	default:
-		log.Println(msg)
+		log.Println(fmt.Sprintln(msg...))
 	}
 }
 
