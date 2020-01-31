@@ -2,6 +2,7 @@ package music
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -11,10 +12,15 @@ import (
 	"github.com/dhowden/tag"
 )
 
-// const for default config
-const (
-	MUSICROOT = "/Music"
-)
+// MUSICROOT is the parent directory for your music
+var MUSICROOT = "/Music"
+
+func init() {
+	if ok, _ := exists(MUSICROOT); !ok {
+		MUSICROOT = path.Join(os.Getenv("HOME"), "Music")
+		logger.Log(logger.INFO, fmt.Sprintf("Using new music root %s instead of default root /Music", MUSICROOT))
+	}
+}
 
 // MList ...
 type MList struct {
