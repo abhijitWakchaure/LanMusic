@@ -3,13 +3,13 @@ package music
 import (
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"path"
 
 	"github.com/abhijitWakchaure/lanmusic/gosrc/logger"
+	"github.com/dhowden/tag"
 )
 
 // MUSICROOT is the parent directory for your music
@@ -24,22 +24,32 @@ func init() {
 
 // MList ...
 type MList struct {
-	Filenames []MObject
+	Songs []SongMetadata
 }
 
 // MObject ...
-type MObject struct {
-	Name  string `json:"name"`
-	Size  int64  `json:"size"`
-	IsDir bool   `json:"isDir"`
-	Path  string `json:"path"`
+type SongMetadata struct {
+	Title    string `json:"title"`
+	Album    string `json:"album"`
+	Artist   string `json:"artist"`
+	Composer string `json:"composer"`
+	Genre    string `json:"genre"`
+	Year     int    `json:"year"`
+	Path     string `json:"path"`
+	// AlbumArt *tag.Picture `bson:"albumArt" json:"albumArt"`
 }
+
+var mlist MList
 
 func songPath(files []os.FileInfo, mlist *MList, musicroot string) error {
 	for _, f := range files {
 		if f.IsDir() {
 			curRoot := path.Join(musicroot, f.Name())
-			files, err := ioutil.ReadDir(curRoot)
+			folder, err := os.Open(curRoot)
+			if err != nil {
+				log.Fatal(err)
+			}
+			files, err := folder.Readdir(-1)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -49,22 +59,46 @@ func songPath(files []os.FileInfo, mlist *MList, musicroot string) error {
 			}
 		}
 		if !f.IsDir() {
-			md := MObject{Name: f.Name(), Size: f.Size(), IsDir: f.IsDir(), Path: path.Join(musicroot, f.Name())}
-			mlist.Filenames = append(mlist.Filenames, md)
+			a, err := os.Open(path.Join(musicroot, f.Name()))
+			defer a.Close()
+			if err != nil {
+				logger.Log(logger.INFO, err.Error())
+			}
+			m, err := tag.ReadFrom(a)
+			if err != nil {
+				logger.Log(logger.INFO, err.Error())
+			} else {
+				md := SongMetadata{
+					Title:    m.Title(),
+					Album:    m.Album(),
+					Artist:   m.Artist(),
+					Composer: m.Composer(),
+					Genre:    m.Genre(),
+					Year:     m.Year(),
+					Path:     path.Join(musicroot, f.Name()),
+					// AlbumArt: m.Picture()
+				}
+				mlist.Songs = append(mlist.Songs, md)
+			}
 		}
 	}
 	return nil
 }
 
 func listDir() MList {
-	var mlist MList
 	if ok, err := exists(MUSICROOT); !ok {
 		logger.Log(logger.CRITICAL, "Make sure your mount target is "+MUSICROOT+" Err:"+err.Error())
 	}
-	files, err := ioutil.ReadDir(MUSICROOT)
+	// files, err := ioutil.ReadDir(MUSICROOT)
+	folder, err := os.Open(MUSICROOT)
 	if err != nil {
 		log.Fatal(err)
 	}
+	files, err := folder.Readdir(-1)
+	if err != nil {
+		log.Fatal(err)
+	}
+	// os.Open(MUSICROOT).ReadDir()
 	err = songPath(files, &mlist, MUSICROOT)
 	if err != nil {
 		log.Fatal(err)
