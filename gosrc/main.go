@@ -5,9 +5,14 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/abhijitWakchaure/lanmusic/gosrc/logger"
 	"github.com/abhijitWakchaure/lanmusic/gosrc/music"
 	"github.com/gorilla/handlers"
 )
+
+func init() {
+	logger.Log(logger.INFO, "Initializing LanMusic...")
+}
 
 func main() {
 	shutdown := make(chan bool)

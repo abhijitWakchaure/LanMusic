@@ -20,7 +20,7 @@ const (
 
 // Log will do the actual logging
 func Log(logLevel LogLevel, msg interface{}) {
-	log.SetPrefix("[LanMusic] ")
+	log.SetPrefix("# ")
 	switch logLevel {
 	case INFO:
 		log.Println(INFO, msg)
