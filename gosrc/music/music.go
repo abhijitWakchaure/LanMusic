@@ -18,20 +18,22 @@ const (
 
 // MList ...
 type MList struct {
-	Filenames []MObject
+	Songs []SongMetadata
 }
 
 // MObject ...
-type MObject struct {
-	Title    string       `json:"title"`
-	Album    string       `json:"album"`
-	Artist   string       `json:"artist"`
-	Composer string       `json:"composer"`
-	Genre    string       `json:"genre"`
-	Year     int          `json:"year"`
-	Path     string       `json:"path"`
-	AlbumArt *tag.Picture `bson:"albumArt" json:"albumArt"`
+type SongMetadata struct {
+	Title    string `json:"title"`
+	Album    string `json:"album"`
+	Artist   string `json:"artist"`
+	Composer string `json:"composer"`
+	Genre    string `json:"genre"`
+	Year     int    `json:"year"`
+	Path     string `json:"path"`
+	// AlbumArt *tag.Picture `bson:"albumArt" json:"albumArt"`
 }
+
+var mlist MList
 
 func songPath(files []os.FileInfo, mlist *MList, musicroot string) error {
 	for _, f := range files {
@@ -60,7 +62,7 @@ func songPath(files []os.FileInfo, mlist *MList, musicroot string) error {
 			if err != nil {
 				logger.Log(logger.INFO, err.Error())
 			} else {
-				md := MObject{
+				md := SongMetadata{
 					Title:    m.Title(),
 					Album:    m.Album(),
 					Artist:   m.Artist(),
@@ -68,8 +70,9 @@ func songPath(files []os.FileInfo, mlist *MList, musicroot string) error {
 					Genre:    m.Genre(),
 					Year:     m.Year(),
 					Path:     path.Join(musicroot, f.Name()),
-					AlbumArt: m.Picture()}
-				mlist.Filenames = append(mlist.Filenames, md)
+					// AlbumArt: m.Picture()
+				}
+				mlist.Songs = append(mlist.Songs, md)
 			}
 		}
 	}
@@ -77,7 +80,6 @@ func songPath(files []os.FileInfo, mlist *MList, musicroot string) error {
 }
 
 func listDir() MList {
-	var mlist MList
 	if ok, err := exists(MUSICROOT); !ok {
 		logger.Log(logger.CRITICAL, "Make sure your mount target is "+MUSICROOT+" Err:"+err.Error())
 	}

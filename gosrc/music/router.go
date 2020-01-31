@@ -26,6 +26,12 @@ var routes = Routes{
 		"/music",
 		ListMusic,
 	},
+	Route{
+		"ListMusicWithCursor",
+		"GET",
+		"/music/{cursor}",
+		ListMusicWithCursor,
+	},
 }
 
 //NewRouter configures a new router to the API
