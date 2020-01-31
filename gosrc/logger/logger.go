@@ -28,17 +28,17 @@ func init() {
 func Log(logLevel LogLevel, msg ...interface{}) {
 	switch logLevel {
 	case DEBUG:
-		log.Println(DEBUG, fmt.Sprintln(msg...))
+		log.Print(DEBUG, fmt.Sprintln(msg...))
 	case INFO:
-		log.Println(INFO, fmt.Sprintln(msg...))
+		log.Print(INFO, fmt.Sprintln(msg...))
 	case ERROR:
-		log.Println(ERROR, fmt.Sprintln(msg...))
+		log.Print(ERROR, fmt.Sprintln(msg...))
 	case FATAL:
-		log.Fatalln(FATAL, fmt.Sprintln(msg...))
+		log.Fatal(FATAL, fmt.Sprintln(msg...))
 	case CRITICAL:
-		log.Fatalln(CRITICAL, fmt.Sprintln(msg...))
+		log.Fatal(CRITICAL, fmt.Sprintln(msg...))
 	default:
-		log.Println(fmt.Sprintln(msg...))
+		log.Print(fmt.Sprintln(msg...))
 	}
 }
 
