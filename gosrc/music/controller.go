@@ -29,7 +29,7 @@ func ListMusic(w http.ResponseWriter, r *http.Request) {
 			message: "Unable to list your music",
 		})
 	}
-	fmt.Printf("res %v\n", string(res))
+	// fmt.Printf("res %v\n", string(res))
 	w.Write(res)
 	return
 }
