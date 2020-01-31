@@ -13,7 +13,7 @@ import (
 
 // const for default config
 const (
-	MUSICROOT = "/home/apadwal/Music"
+	MUSICROOT = "/Music"
 )
 
 // MList ...
