@@ -22,7 +22,26 @@ export class DataServiceService {
   doGetMusic() {
     return this.http.get(baseURL, httpOptions).pipe(
       map((res: any) => {
-        console.log("Server Response", res);
+        console.log("Server Response", res.body);
+        return res.body;
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  doGetPrevious(index: number) {
+    return this.http.get(baseURL + "/" + (index - 10), httpOptions).pipe(
+      map((res: any) => {
+        console.log("Server Response", res.body);
+        return res.body;
+      }),
+      catchError(this.handleError)
+    );
+  }
+  doGetNext(index: number) {
+    return this.http.get(baseURL + "/" + index, httpOptions).pipe(
+      map((res: any) => {
+        console.log("Server Response", res.body);
         return res.body;
       }),
       catchError(this.handleError)
