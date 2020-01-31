@@ -5,9 +5,9 @@
   </div>
 </div>
 
-<div class="container">
+<div class="container mb-5">
   <div *ngIf="isDataLoaded">
-    <div class="card mb-2" *ngFor="let md of musicData; let i = index">
+    <div class="card mb-2" *ngFor="let md of musicList.songs; let i = index">
       <div class="card-body">
         <div class="row">
           <div class="col-sm-1">
@@ -17,8 +17,30 @@
             />
           </div>
           <div class="col-sm-10 card-text">
-            {{ md.name }}
-            <p class="text-muted">{{ md.path || "path/to/music" }}</p>
+            <h4 class="card-title">
+              <a
+                class="text-success"
+                style="text-decoration: none;"
+                href="{{ md.path || '#' }}"
+                >{{ md.title }}</a
+              >
+            </h4>
+            <div class="text-muted">
+              <div class="row">
+                <div class="col">
+                  <strong>Album: </strong>{{ md.album || "NA" }}
+                </div>
+                <div class="col">
+                  <strong>Release Year: </strong
+                  >{{ ("" + md.year | slice: 0:4) || "NA" }}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <strong>Artist: </strong>{{ md.artist || "NA" }}
+                </div>
+              </div>
+            </div>
           </div>
           <div
             class="col-sm-1 text-center mx-auto my-auto"
@@ -28,6 +50,36 @@
           </div>
         </div>
       </div>
+    </div>
+    <div class="mt-3">
+      <ul class="pagination justify-content-center">
+        <li
+          class="page-item"
+          [attr.disabled]="!musicList.cursor.hasPrevious ? '' : disabled"
+        >
+          <a
+            class="page-link"
+            href="{{ '#' + (musicList.cursor.index - 10) }}"
+            (click)="getPrevious()"
+            [attr.disabled]="!musicList.cursor.hasPrevious ? '' : disabled"
+          >
+            Previous
+          </a>
+        </li>
+        <li
+          class="page-item"
+          [attr.disabled]="!musicList.cursor.hasNext ? '' : disabled"
+        >
+          <a
+            class="page-link"
+            href="{{ '#' + (musicList.cursor.index) }}"
+            (click)="getNext()"
+            [attr.disabled]="!musicList.cursor.hasNext ? '' : disabled"
+          >
+            Next
+          </a>
+        </li>
+      </ul>
     </div>
   </div>
   <div class="text-center" *ngIf="!isDataLoaded">
