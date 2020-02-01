@@ -1,7 +1,6 @@
 package music
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -14,17 +13,16 @@ import (
 
 // ListMusic ...
 func ListMusic(w http.ResponseWriter, r *http.Request) {
-	mlist := listDir()
 	SetResponseHeaders(w)
 	w.WriteHeader(http.StatusOK)
-	fmt.Printf("Found %v\n", len(mlist.Songs))
+	songSlice := mlist.Songs[:PAGESIZE]
 	data := MList{
-		Songs: mlist.Songs[:10],
+		Songs: songSlice,
 		Cursor: Cursor{
-			HasNext:     true,
-			HasPrevious: false,
-			Index:       10,
-			Length:      10,
+			HasNext:     hasNext(0),
+			HasPrevious: hasPrevious(0),
+			Index:       PAGESIZE,
+			Length:      len(songSlice),
 			Total:       len(mlist.Songs),
 		},
 	}
@@ -37,33 +35,32 @@ func ListMusic(w http.ResponseWriter, r *http.Request) {
 //ListMusicWithCursor ...
 func ListMusicWithCursor(w http.ResponseWriter, r *http.Request) {
 	var response []byte
-	cursor := mux.Vars(r)["cursor"]
-	i, err := strconv.Atoi(cursor)
-	// fmt.Println(i)
+	cString := mux.Vars(r)["cursor"]
+	c, err := strconv.Atoi(cString)
 	if err != nil {
 		response = lmsresponse.GetResponseBytes(lmsresponse.ERROR, "Expecting integer Value", nil)
 	}
-	logger.Log(logger.INFO, "Cursor:", i)
 	SetResponseHeaders(w)
 	w.WriteHeader(http.StatusOK)
-	fmt.Printf("Found %v\n", len(mlist.Songs))
-	var from, to int
-	from = i + 1
-	to = from + 10
-	if from > len(mlist.Songs) {
-		from = 0
-		to = from + 10
+	logger.Log(logger.INFO, "Received cursor index:", c)
+	if c > (len(mlist.Songs)-1) || c < 0 {
+		response = lmsresponse.GetResponseBytes(lmsresponse.ERROR, "Invalid cursor index", nil)
+		w.Write(response)
+		return
 	}
-	if to > len(mlist.Songs) {
-		to = len(mlist.Songs)
+	var songSlice []SongMetadata
+	if (c + PAGESIZE) > len(mlist.Songs)-1 {
+		songSlice = mlist.Songs[c:]
+	} else {
+		songSlice = mlist.Songs[c:(c + PAGESIZE)]
 	}
 	data := MList{
-		Songs: mlist.Songs[from:to],
+		Songs: songSlice,
 		Cursor: Cursor{
-			HasNext:     true,
-			HasPrevious: true,
-			Index:       i + 10,
-			Length:      10,
+			HasNext:     hasNext(c + PAGESIZE),
+			HasPrevious: hasPrevious(c + PAGESIZE),
+			Index:       c + PAGESIZE,
+			Length:      len(songSlice),
 			Total:       len(mlist.Songs),
 		},
 	}

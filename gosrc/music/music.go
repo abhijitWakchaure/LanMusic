@@ -14,12 +14,17 @@ import (
 
 // MUSICROOT is the parent directory for your music
 var MUSICROOT = "/Music"
+var mlist MList
+var _index = 0
+
+const PAGESIZE = 10
 
 func init() {
 	if ok, _ := exists(MUSICROOT); !ok {
 		MUSICROOT = path.Join(os.Getenv("HOME"), "Music")
 		logger.Log(logger.INFO, fmt.Sprintf("Using new music root %s instead of default root /Music", MUSICROOT))
 	}
+	mlist = listDir()
 }
 
 // MList ...
@@ -30,6 +35,7 @@ type MList struct {
 
 // SongMetadata holds the metadata about the song
 type SongMetadata struct {
+	ID       int    `json:"id"`
 	Title    string `json:"title"`
 	Album    string `json:"album"`
 	Artist   string `json:"artist"`
@@ -49,7 +55,19 @@ type Cursor struct {
 	Length      int  `json:"length"`
 }
 
-var mlist MList
+func hasNext(c int) bool {
+	if len(mlist.Songs) > c {
+		return true
+	}
+	return false
+}
+
+func hasPrevious(c int) bool {
+	if (c - PAGESIZE) > 0 {
+		return true
+	}
+	return false
+}
 
 func songPath(files []os.FileInfo, mlist *MList, musicroot string) error {
 	for _, f := range files {
@@ -79,6 +97,7 @@ func songPath(files []os.FileInfo, mlist *MList, musicroot string) error {
 				// logger.Log(logger.INFO, err.Error())
 			} else {
 				md := SongMetadata{
+					ID:       _index,
 					Title:    m.Title(),
 					Album:    m.Album(),
 					Artist:   m.Artist(),
@@ -89,6 +108,7 @@ func songPath(files []os.FileInfo, mlist *MList, musicroot string) error {
 					// AlbumArt: m.Picture()
 				}
 				mlist.Songs = append(mlist.Songs, md)
+				_index++
 			}
 		}
 	}
@@ -113,7 +133,7 @@ func listDir() MList {
 	if err != nil {
 		log.Fatal(err)
 	}
-
+	logger.Log(logger.INFO, "Directory listing completed...Music files found:", len(mlist.Songs))
 	return mlist
 }
 
