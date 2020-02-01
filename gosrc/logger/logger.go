@@ -12,11 +12,11 @@ type LogLevel string
 
 // const for different log levels
 const (
-	DEBUG    LogLevel = "[DEBUG]"
-	INFO     LogLevel = "[INFO]"
-	ERROR    LogLevel = "[ERROR]"
-	FATAL    LogLevel = "[FATAL]"
-	CRITICAL LogLevel = "[CRITICAL]"
+	DEBUG    LogLevel = "[DEBUG] "
+	INFO     LogLevel = "[INFO] "
+	ERROR    LogLevel = "[ERROR] "
+	FATAL    LogLevel = "[FATAL] "
+	CRITICAL LogLevel = "[CRITICAL] "
 	DEFAULT  LogLevel = ""
 )
 
