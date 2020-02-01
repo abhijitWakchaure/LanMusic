@@ -30,7 +30,7 @@ export class DataServiceService {
   }
 
   doGetPrevious(index: number) {
-    return this.http.get(baseURL + "/" + (index - 10), httpOptions).pipe(
+    return this.http.get(baseURL + "/" + (index - 20), httpOptions).pipe(
       map((res: any) => {
         console.log("Server Response", res.body);
         return res.body;
