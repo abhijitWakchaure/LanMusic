@@ -6,7 +6,12 @@
 </div>
 
 <div class="container mb-5">
-  <div *ngIf="isDataLoaded">
+  <div class="text-center" *ngIf="isError">
+    <div class="card bg-danger text-white">
+      <div class="card-body">{{ ErrorMsg }}</div>
+    </div>
+  </div>
+  <div *ngIf="isDataLoaded && musicList?.songs">
     <div class="card mb-2" *ngFor="let md of musicList.songs; let i = index">
       <div class="card-body">
         <div class="row">
@@ -88,10 +93,5 @@
   <div class="text-center" *ngIf="!isDataLoaded">
     Loading your favorite music...
     <div class="loader">&nbsp;</div>
-  </div>
-  <div class="text-center" *ngIf="isError">
-    <div class="card bg-danger text-white">
-      <div class="card-body">{{ ErrorMsg }}</div>
-    </div>
   </div>
 </div>
