@@ -1,4 +1,5 @@
 export interface ISongMetadata {
+  id?: number;
   title?: string;
   album?: string;
   artist?: string;

@@ -18,6 +18,7 @@
           </div>
           <div class="col-sm-10 card-text">
             <h4 class="card-title">
+              {{ md.id + 1 }}
               <a
                 class="text-success"
                 style="text-decoration: none;"
@@ -55,11 +56,12 @@
       <ul class="pagination justify-content-center">
         <li
           class="page-item"
+          [ngClass]="{ disabled: !musicList.cursor.hasPrevious }"
           [attr.disabled]="!musicList.cursor.hasPrevious ? '' : disabled"
         >
           <a
             class="page-link"
-            href="{{ '#' + (musicList.cursor.index - 10) }}"
+            href="{{ '#' + (musicList.cursor.index - 20) }}"
             (click)="getPrevious()"
             [attr.disabled]="!musicList.cursor.hasPrevious ? '' : disabled"
           >
@@ -68,11 +70,12 @@
         </li>
         <li
           class="page-item"
+          [ngClass]="{ disabled: !musicList.cursor.hasNext }"
           [attr.disabled]="!musicList.cursor.hasNext ? '' : disabled"
         >
           <a
             class="page-link"
-            href="{{ '#' + (musicList.cursor.index) }}"
+            href="{{ '#' + musicList.cursor.index }}"
             (click)="getNext()"
             [attr.disabled]="!musicList.cursor.hasNext ? '' : disabled"
           >
