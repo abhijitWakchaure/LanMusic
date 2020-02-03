@@ -18,6 +18,7 @@ const (
 	FATAL    LogLevel = "[FATAL] "
 	CRITICAL LogLevel = "[CRITICAL] "
 	DEFAULT  LogLevel = ""
+	REQUEST  LogLevel = "[REQUEST] "
 )
 
 func init() {
@@ -48,7 +49,8 @@ func Logger(inner http.Handler, name string) http.Handler {
 		start := time.Now()
 		inner.ServeHTTP(w, r)
 		log.Printf(
-			"%s\t%s\t%s\t%s",
+			"%s %s: %s\t%s\t%s",
+			REQUEST,
 			r.Method,
 			r.RequestURI,
 			name,
