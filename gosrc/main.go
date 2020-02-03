@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -11,7 +10,7 @@ import (
 )
 
 func init() {
-	logger.Log(logger.INFO, "Initializing LanMusic...")
+	logger.Log(logger.INFO, "Starting LanMusic...")
 }
 
 func main() {
@@ -28,8 +27,8 @@ func main() {
 		log.Fatal(http.ListenAndServe(":9000", handlers.CORS(allowedOrigins, allowedMethods, allowedHeaders)(musicRouter)))
 		shutdown <- true
 	}()
-	fmt.Printf("LanMusic api server started on port 9000\n")
-	fmt.Println("You can visit the web interface at:  http://localhost")
+	logger.Log(logger.INFO, "LanMusic api server started on port 9000")
+	logger.Log(logger.INFO, "You can visit the web interface at:  http://localhost")
 
 	<-shutdown
 }
