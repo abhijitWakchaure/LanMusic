@@ -42,24 +42,27 @@ func ListMusicWithCursor(w http.ResponseWriter, r *http.Request) {
 	}
 	SetResponseHeaders(w)
 	w.WriteHeader(http.StatusOK)
-	logger.Log(logger.INFO, "Received cursor index:", c)
+	logger.Log(logger.DEBUG, "Received cursor index:", c)
 	if c > (len(mlist.Songs)-1) || c < 0 {
 		response = lmsresponse.GetResponseBytes(lmsresponse.ERROR, "Invalid cursor index", nil)
 		w.Write(response)
 		return
 	}
 	var songSlice []SongMetadata
+	var index int
 	if (c + PAGESIZE) > len(mlist.Songs)-1 {
 		songSlice = mlist.Songs[c:]
+		index = 0
 	} else {
 		songSlice = mlist.Songs[c:(c + PAGESIZE)]
+		index = c + PAGESIZE
 	}
 	data := MList{
 		Songs: songSlice,
 		Cursor: Cursor{
 			HasNext:     hasNext(c + PAGESIZE),
 			HasPrevious: hasPrevious(c + PAGESIZE),
-			Index:       c + PAGESIZE,
+			Index:       index,
 			Length:      len(songSlice),
 			Total:       len(mlist.Songs),
 		},
