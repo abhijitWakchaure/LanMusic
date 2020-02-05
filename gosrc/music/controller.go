@@ -1,6 +1,7 @@
 package music
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -37,15 +38,21 @@ const seconds = 2
 
 //StreamMusic starts streaming music
 func StreamMusic(w http.ResponseWriter, r *http.Request) {
+	var found bool
 	songID := mux.Vars(r)["songID"]
-	var songDetails SongMetadata
 	for _, song := range mlist.Songs {
 		if song.ID == songID {
-			songDetails = song
+			fpath := song.Path
+			found = true
+			http.ServeFile(w, r, fpath)
+			break
 		}
+		fmt.Println(song.ID)
 	}
-	fpath := songDetails.Path
-	http.ServeFile(w, r, fpath)
+	if !found {
+		response := lmsresponse.GetResponseBytes(lmsresponse.ERROR, "No such song", songID)
+		w.Write(response)
+	}
 }
 
 //ListMusicWithCursor ...
