@@ -1,6 +1,7 @@
 package music
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -30,6 +31,26 @@ func ListMusic(w http.ResponseWriter, r *http.Request) {
 	// fmt.Printf("res %v\n", string(res))
 	w.Write(response)
 	return
+}
+
+func StreamMusic(w http.ResponseWriter, r *http.Request) {
+	var response []byte
+	songID := mux.Vars(r)["songID"]
+	ID, err := strconv.Atoi(songID)
+	if err != nil {
+		response = lmsresponse.GetResponseBytes(lmsresponse.ERROR, "Expecting integer Value", nil)
+	}
+	var songDetails SongMetadata
+	for _, song := range mlist.Songs {
+		if song.ID == ID {
+			fmt.Println(song.Title, song.Album)
+			songDetails = song
+		}
+	}
+	SetResponseHeaders(w)
+	w.WriteHeader(http.StatusOK)
+	response = lmsresponse.GetResponseBytes(lmsresponse.SUCCESS, "Song requested to play is: ", songDetails)
+	w.Write(response)
 }
 
 //ListMusicWithCursor ...
