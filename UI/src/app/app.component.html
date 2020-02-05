@@ -23,11 +23,11 @@
           </div>
           <div class="col-sm-10 card-text">
             <h4 class="card-title">
-              {{ md.id + 1 }}
               <a
-                class="text-success"
+                class="text-dark"
+                href="#"
                 style="text-decoration: none;"
-                href="{{ md.path || '#' }}"
+                (click)="updateNowPlaying(md)"
                 >{{ md.title }}</a
               >
             </h4>
@@ -37,13 +37,11 @@
                   <strong>Album: </strong>{{ md.album || "NA" }}
                 </div>
                 <div class="col">
+                  <strong>Artist: </strong>{{ md.artist || "NA" }}
+                </div>
+                <div class="col">
                   <strong>Release Year: </strong
                   >{{ ("" + md.year | slice: 0:4) || "NA" }}
-                </div>
-              </div>
-              <div class="row">
-                <div class="col">
-                  <strong>Artist: </strong>{{ md.artist || "NA" }}
                 </div>
               </div>
             </div>
@@ -51,8 +49,9 @@
           <div
             class="col-sm-1 text-center mx-auto my-auto"
             style="font-size: 1.5em;"
+            (click)="updateNowPlaying(md)"
           >
-            <i class="fa fa-play"></i>
+            <a href="#" class="text-dark"><i class="fa fa-play"></i></a>
           </div>
         </div>
       </div>
@@ -95,3 +94,5 @@
     <div class="loader">&nbsp;</div>
   </div>
 </div>
+<div class="my-5">&nbsp;</div>
+<app-player></app-player>

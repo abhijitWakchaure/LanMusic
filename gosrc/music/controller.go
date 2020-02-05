@@ -32,6 +32,27 @@ func ListMusic(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+const sampleRate = 44100
+const seconds = 2
+
+//StreamMusic starts streaming music
+func StreamMusic(w http.ResponseWriter, r *http.Request) {
+	var found bool
+	songID := mux.Vars(r)["songID"]
+	for _, song := range mlist.Songs {
+		if song.ID == songID {
+			fpath := song.Path
+			found = true
+			http.ServeFile(w, r, fpath)
+			break
+		}
+	}
+	if !found {
+		response := lmsresponse.GetResponseBytes(lmsresponse.ERROR, "No such song", songID)
+		w.Write(response)
+	}
+}
+
 //ListMusicWithCursor ...
 func ListMusicWithCursor(w http.ResponseWriter, r *http.Request) {
 	var response []byte

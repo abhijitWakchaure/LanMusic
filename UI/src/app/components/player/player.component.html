@@ -1,0 +1,45 @@
+<div class="fixed-bottom bg-dark p-2 text-white" *ngIf="ps.nowPlaying?.id">
+  <div class="row">
+    <div class="col-sm-7 card-text">
+      <img
+        class="img-fluid"
+        src="https://picsum.photos/seed/{{ ps.nowPlaying.id }}/70"
+        alt="album art"
+      />
+      <div class="align-top px-3 py-1" style="display: inline-block;">
+        <span class="">
+          {{ ps.nowPlaying.title }}
+        </span>
+        <span class="text-muted">{{
+          ps.nowPlaying.artist ? "by " + ps.nowPlaying.artist : ""
+        }}</span>
+        <div class="text-muted">
+          {{ ps.nowPlaying.album ? "Album " + ps.nowPlaying.album : "" }}
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-5 text-center align-middle">
+      <div class="row py-2">
+        <div class="col text-left">
+          {{ ps.songAudioCurrentTimeDate | date: "mm:ss" }}
+        </div>
+        <div class="col text-center" (click)="ps.togglePlayPause()">
+          <a href="#" class="text-white">
+            <i class="fa fa-play" *ngIf="ps.songAudio.paused"></i>
+            <i class="fa fa-pause" *ngIf="!ps.songAudio.paused"></i>
+          </a>
+        </div>
+        <div class="col text-right">
+          {{ ps.songAudioDurationDate | date: "mm:ss" }}
+        </div>
+      </div>
+      <div class="progress" style="height:10px">
+        <div
+          class="progress-bar"
+          style="height: 10px;"
+          [ngStyle]="{ width: ps.songAudioProgress + '%' }"
+        ></div>
+      </div>
+    </div>
+  </div>
+</div>

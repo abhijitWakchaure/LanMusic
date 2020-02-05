@@ -1,6 +1,8 @@
 package music
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"log"
@@ -15,7 +17,6 @@ import (
 // MUSICROOT is the parent directory for your music
 var MUSICROOT = "/Music"
 var mlist MList
-var _index = 0
 
 const PAGESIZE = 10
 
@@ -35,7 +36,7 @@ type MList struct {
 
 // SongMetadata holds the metadata about the song
 type SongMetadata struct {
-	ID       int    `json:"id"`
+	ID       string `json:"id"`
 	Title    string `json:"title"`
 	Album    string `json:"album"`
 	Artist   string `json:"artist"`
@@ -69,6 +70,16 @@ func hasPrevious(c int) bool {
 	return false
 }
 
+func getFileHash(path string) string {
+	hash := md5.Sum([]byte(path))
+	return hex.EncodeToString(hash[:])
+	// h := sha256.New()
+	// if _, err := io.Copy(h, f); err != nil {
+	// 	logger.Log(logger.FATAL, "Unable to calculate file hash", err)
+	// }
+	// return string(h.Sum(nil))
+}
+
 func songPath(files []os.FileInfo, mlist *MList, musicroot string) error {
 	for _, f := range files {
 		if f.IsDir() {
@@ -97,7 +108,7 @@ func songPath(files []os.FileInfo, mlist *MList, musicroot string) error {
 				// logger.Log(logger.INFO, err.Error())
 			} else {
 				md := SongMetadata{
-					ID:       _index,
+					ID:       getFileHash(f.Name()),
 					Title:    m.Title(),
 					Album:    m.Album(),
 					Artist:   m.Artist(),
@@ -108,7 +119,6 @@ func songPath(files []os.FileInfo, mlist *MList, musicroot string) error {
 					// AlbumArt: m.Picture()
 				}
 				mlist.Songs = append(mlist.Songs, md)
-				_index++
 			}
 		}
 	}

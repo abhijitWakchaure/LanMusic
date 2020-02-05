@@ -32,6 +32,12 @@ var routes = Routes{
 		"/music/{cursor}",
 		ListMusicWithCursor,
 	},
+	Route{
+		"StreamMusic",
+		"GET",
+		"/stream/{songID}",
+		StreamMusic,
+	},
 }
 
 //NewRouter configures a new router to the API
