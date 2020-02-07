@@ -1,11 +1,7 @@
 package music
 
 import (
-<<<<<<< HEAD
 	"encoding/json"
-	"fmt"
-=======
->>>>>>> b18fea3b8f4c100caf98ff3e42beddd491388f0f
 	"net/http"
 	"strconv"
 	"strings"
