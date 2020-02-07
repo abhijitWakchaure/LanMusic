@@ -1,9 +1,11 @@
 package music
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/abhijitWakchaure/lanmusic/gosrc/logger"
 
@@ -33,8 +35,32 @@ func ListMusic(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-const sampleRate = 44100
-const seconds = 2
+//SongSearcher returns true if search terms present in song
+func SongSearcher(sq string, song *SongMetadata) bool {
+	songString, _ := json.Marshal(song)
+	if strings.Contains(string(songString), sq) {
+		return true
+	}
+	return false
+}
+
+//SearchMusic searches a track in local songs root directory
+func SearchMusic(w http.ResponseWriter, r *http.Request) {
+	SetResponseHeaders(w)
+	w.WriteHeader(http.StatusOK)
+
+	searchQuery := mux.Vars(r)["searchQuery"]
+	var searchResultList []SongMetadata
+
+	for _, song := range mlist.Songs {
+		isPresent := SongSearcher(searchQuery, &song)
+		if isPresent {
+			searchResultList = append(searchResultList, song)
+		}
+	}
+	response := lmsresponse.GetResponseBytes(lmsresponse.SUCCESS, "Here is your favorite music", searchResultList)
+	w.Write(response)
+}
 
 //StreamMusic starts streaming music
 func StreamMusic(w http.ResponseWriter, r *http.Request) {
