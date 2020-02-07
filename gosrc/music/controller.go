@@ -1,8 +1,11 @@
 package music
 
 import (
+<<<<<<< HEAD
 	"encoding/json"
 	"fmt"
+=======
+>>>>>>> b18fea3b8f4c100caf98ff3e42beddd491388f0f
 	"net/http"
 	"strconv"
 	"strings"
@@ -73,7 +76,6 @@ func StreamMusic(w http.ResponseWriter, r *http.Request) {
 			http.ServeFile(w, r, fpath)
 			break
 		}
-		fmt.Println(song.ID)
 	}
 	if !found {
 		response := lmsresponse.GetResponseBytes(lmsresponse.ERROR, "No such song", songID)
