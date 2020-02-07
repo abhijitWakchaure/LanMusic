@@ -24,9 +24,10 @@
           <div class="col-sm-10 card-text">
             <h4 class="card-title">
               <a
-                class="text-success"
+                class="text-dark"
+                href="#"
                 style="text-decoration: none;"
-                href="{{ '/stream/' + md.id }}"
+                (click)="updateNowPlaying(md)"
                 >{{ md.title }}</a
               >
             </h4>
@@ -45,12 +46,13 @@
               </div>
             </div>
           </div>
-          <!-- <div
+          <div
             class="col-sm-1 text-center mx-auto my-auto"
             style="font-size: 1.5em;"
+            (click)="updateNowPlaying(md)"
           >
-            <i class="fa fa-play"></i>
-          </div> -->
+            <a href="#" class="text-dark"><i class="fa fa-play"></i></a>
+          </div>
         </div>
       </div>
     </div>
@@ -92,3 +94,5 @@
     <div class="loader">&nbsp;</div>
   </div>
 </div>
+<div class="my-5">&nbsp;</div>
+<app-player></app-player>

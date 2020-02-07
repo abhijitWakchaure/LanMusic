@@ -1,6 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { DataServiceService } from "src/services/data-service.service";
 import { IMList } from "./models/iMList";
+import { ISongMetadata } from "./models/iSongMetadata";
+import { PlayerService } from "./services/player.service";
 
 @Component({
   selector: "app-root",
@@ -14,7 +16,10 @@ export class AppComponent implements OnInit {
   ErrorMsg: string;
   musicList: IMList;
 
-  constructor(private dataService: DataServiceService) {}
+  constructor(
+    private dataService: DataServiceService,
+    private ps: PlayerService
+  ) {}
 
   ngOnInit() {
     this.isDataLoaded = false;
@@ -65,5 +70,10 @@ export class AppComponent implements OnInit {
           console.log("Unable to getMusic", res);
         }
       });
+  }
+
+  updateNowPlaying(md: ISongMetadata) {
+    this.ps.nowPlaying = md;
+    this.ps.observableNowPlaying.next(md)
   }
 }
